@@ -1,0 +1,33 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          tomcat<%= @tomcat_number %>
+# Required-Start:    $network $local_fs
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: <%= @pkg_tomcat %>
+# Description:       <%= @pkg_tomcat %>
+### END INIT INFO
+
+case $1 in
+  start)
+        <%= @inst_dir %>/<%= @pkg_tomcat %>/bin/startup.sh
+        exit $?
+  ;;
+  stop)
+        <%= @inst_dir %>/<%= @pkg_tomcat %>/bin/shutdown.sh
+        exit $?
+  ;;
+  restart)
+        <%= @inst_dir %>/<%= @pkg_tomcat %>/bin/shutdown.sh
+        <%= @inst_dir %>/<%= @pkg_tomcat %>/bin/startup.sh
+        exit $?
+  ;;
+  status)
+        <%= @inst_dir %>/<%= @pkg_tomcat %>/bin/tomcat-wrapper.sh status
+        exit $?
+  ;;
+  *)
+        echo "Syntax: $0 start|stop|restart|status"
+  ;;
+esac

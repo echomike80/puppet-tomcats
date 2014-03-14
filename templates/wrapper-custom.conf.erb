@@ -1,0 +1,34 @@
+##*************************************************************************************##
+##                                                                                     ##
+##  Diese Datei DARF bearbeitet werden und überschreibt die Standardeinstellungen in   ##
+##  der Datei wrapper-default.conf.                                                    ##
+##                                                                                     ##
+##*************************************************************************************##
+
+
+## Hier kann ein neues JAVA_HOME gesetzt werden und die Standardeinstellung wird überschrieben
+# set.JAVA_HOME=<%= @java_home %>
+
+
+## Zusätzliche Java Parameter
+## GerisSte Active MQ Bug Birt
+wrapper.java.additional.10=-Dorg.apache.activeio.journal.active.DisableLocking=true
+wrapper.java.additional.11=-Dcom.sun.management.jmxremote
+wrapper.java.additional.12=-Dcom.sun.management.jmxremote.port=<%= @jmx_port %>
+wrapper.java.additional.13=-Dcom.sun.management.jmxremote.authenticate=false
+wrapper.java.additional.14=-Dcom.sun.management.jmxremote.ssl=false
+
+wrapper.java.additional.15=-Duser.language=de
+wrapper.java.additional.16=-Duser.country=de
+wrapper.java.additional.17=-Duser.timezone=Europe/Berlin
+wrapper.java.additional.18=-Djava.awt.headless=true
+
+
+## Hier kann die Java Speicherkonfiguration überschrieben werden (Standard: Init 256 MB, Max 1024)
+
+## Initial Java Heap Size (in MB)
+# wrapper.java.initmemory=256
+
+## Maximum Java Heap Size (in MB)
+# wrapper.java.maxmemory=1024
+
