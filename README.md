@@ -10,7 +10,7 @@ Puppet module to manage several tomcat instances on one node
 
 Tomcat with all possible options (example):
 
-class { tomcats::multiple::tomcat01:
+class { tomcats::multiple::tomcat01:<br>
       class_tomcat_release => '7.0.52',
       class_java_home => '/usr/lib/jvm/j2sdk1.6-oracle',
       class_download_tomcat_from => 'http://archive.apache.org',
