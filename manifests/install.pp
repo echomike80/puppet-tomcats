@@ -3,8 +3,10 @@
 define tomcats::install ( 
   $tomcat_number,
   $tomcat_release,
+  $wrapper_release,
   $java_home,
-  $download_from,
+  $download_tomcat_from,
+  $download_wrapper_from,
   $tomcat_user,
   $tomcat_locales,
 ) {
@@ -33,7 +35,7 @@ define tomcats::install (
 	$inst_dir = "/srv/tomcat/tomcat${tomcat_number}"
 
 	# Define Download-URL
-	$download_url = "http://${download_from}/dist/tomcat/tomcat-${majorversion}/v${tomcat_release}/bin/apache-tomcat-${tomcat_release}.tar.gz"
+	$download_url = "${download_tomcat_from}/dist/tomcat/tomcat-${majorversion}/v${tomcat_release}/bin/apache-tomcat-${tomcat_release}.tar.gz"
 
   # Define tomcat ports
   case $tomcat_number {
@@ -90,17 +92,19 @@ define tomcats::install (
        }
         }
 
-	# Wrapper Installationspaket für Betriebssystem und Architektur aussuchen und Download-URL definieren
+	# Define wrapper installation package for OS and arch and define Download-URL
+	# i.e.: http://wrapper.tanukisoftware.com/download/3.5.21/wrapper-linux-x86-32-3.5.21.tar.gz
+	
 	case $operatingsystem {
 		Debian, Linux: {
 			case $architecture {
 				i386: {
-					$pkg_wrapper = "wrapper-linux-x86-32-3.5.21"
-					$download_url_wrapper = "http://lsus.ecg-leipzig.de/dist/java-wrapper/wrapper-linux-x86-32-3.5.21.tar.gz"
+					$pkg_wrapper = "wrapper-linux-x86-32-${wrapper_release}"
+					$download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-32-${wrapper_release}.tar.gz"
 				}
 				amd64: {
-					$pkg_wrapper = "wrapper-linux-x86-64-3.5.21"
-					$download_url_wrapper = "http://lsus.ecg-leipzig.de/dist/java-wrapper/wrapper-linux-x86-64-3.5.21.tar.gz"
+					$pkg_wrapper = "wrapper-linux-x86-64-${wrapper_release}"
+					$download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-64-${wrapper_release}.tar.gz"
 				}
 			}
 		}
@@ -116,49 +120,45 @@ define tomcats::install (
   file { "${inst_dir}":
     ensure  => directory,
     owner => $tomcat_user,
-    group => users,
   }
 
   file { "${inst_dir}/${pkg_tomcat}":
     ensure => directory,
     owner => $tomcat_user,
-    group => users,
     require => File ["$inst_dir"],
   }
 
-  exec { "download_${inst_dir}":
+  exec { "download_tomcat_${inst_dir}":
     path => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     cwd => "/usr/src",
     command => "wget -O apache-tomcat-${tomcat_release}.tar.gz ${download_url}",
     creates => "/usr/src/apache-tomcat-${tomcat_release}.tar.gz",
   }
 
-  exec { "extract_${inst_dir}":
+  exec { "extract_tomcat_${inst_dir}":
     path => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     command => "tar --directory ${inst_dir}/${pkg_tomcat} --strip-components=1 -xzf /usr/src/apache-tomcat-${tomcat_release}.tar.gz",
     user => $tomcat_user,
     unless => "grep ${tomcat_release} ${inst_dir}/${pkg_tomcat}/RELEASE-NOTES",
-    require => [ Exec[ "download_${inst_dir}" ], File[ "${inst_dir}/${pkg_tomcat}" ] ],
+    require => [ Exec[ "download_tomcat_${inst_dir}" ], File[ "${inst_dir}/${pkg_tomcat}" ] ],
   }
 
   file { [ "${inst_dir}/${pkg_tomcat}/webapps/docs", "${inst_dir}/${pkg_tomcat}/webapps/examples", "${inst_dir}/${pkg_tomcat}/webapps/balancer", "${inst_dir}/${pkg_tomcat}/webapps/jsp-examples", "${inst_dir}/${pkg_tomcat}/webapps/servlets-examples", "${inst_dir}/${pkg_tomcat}/webapps/tomcat-docs", "${inst_dir}/${pkg_tomcat}/webapps/webdav" ]:
     ensure => absent,
     force => true,
-    require => Exec ["extract_${inst_dir}"],
+    require => Exec ["extract_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/tomcat-users.xml":
     content => template("tomcats/tomcat-users.xml.erb"),
     owner => $tomcat_user,
-    group => users,
-    require => Exec ["extract_${inst_dir}"],
+    require => Exec ["extract_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/server.xml":
     content => template("tomcats/server${majorversion}.xml.erb"),
     owner => $tomcat_user,
-    group => users,
-    require => Exec ["extract_${inst_dir}"],
+    require => Exec ["extract_tomcat_${inst_dir}"],
   }
 
   # To-Do: Wenn sich der Oracle Client ändert wird die neue Lib nicht mehr kopiert
@@ -168,7 +168,7 @@ define tomcats::install (
     command => "cp \$ORACLE_HOME/jdbc/lib/ojdbc6.jar ${inst_dir}/${pkg_tomcat}/${lib_path}/ojdbc6.jar",
     user => $tomcat_user,
     creates => "${inst_dir}/${pkg_tomcat}/${lib_path}/ojdbc6.jar",
-    require => Exec [ "extract_${inst_dir}" ],
+    require => Exec [ "extract_tomcat_${inst_dir}" ],
   }       
 
   file { "${inst_dir}/ports.txt":
@@ -179,8 +179,7 @@ HTTP-Port: ${http_port}
 AJP-Port: ${ajp_port}
 Shutdown-Port: ${shutdown_port}",
     owner => $tomcat_user,
-    group => users,
-    require => Exec ["extract_${inst_dir}"],
+    require => Exec ["extract_tomcat_${inst_dir}"],
   }
 
 
@@ -197,9 +196,10 @@ Shutdown-Port: ${shutdown_port}",
     cwd => "/usr/src",
     command => "wget -O ${pkg_wrapper}.tar.gz ${download_url_wrapper}",
     creates => "/usr/src/${pkg_wrapper}.tar.gz",
+    require => Exec [ "extract_tomcat_${inst_dir}" ],
   }
-
-  exec { "extract_wrapper_${inst_dir}":
+   
+   exec { "extract_wrapper_${inst_dir}":
     path => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     cwd => "/usr/src",
     command => "tar -xzf /usr/src/${pkg_wrapper}.tar.gz",
@@ -267,7 +267,6 @@ Shutdown-Port: ${shutdown_port}",
   file { "${inst_dir}/${pkg_tomcat}/bin/shutdown.sh":
     content => template('tomcats/shutdown.sh.erb'),
     owner => $tomcat_user,
-    group => 'users',
     mode => 0755,
     require => Exec [ "extract_wrapper_${inst_dir}" ],
   }
