@@ -63,7 +63,7 @@ class tomcats::multiple::tomcat02 (
       
   $tomcat_number = $class_tomcat_number
   
-  # load resource type install_init with all parameters
+  # load resource type install with all parameters
   tomcats::install { "$tomcat_number": 
     tomcat_number => $tomcat_number,
     tomcat_release => $tomcat_release,

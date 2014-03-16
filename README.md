@@ -4,29 +4,40 @@ Puppet Tomcat Module
 Introduction
 ------------
 
-Puppet module to manage several tomcat instances
+Puppet module to manage several tomcat instances on one node
 
 ## Usage ##
 
-Tomcat with all options:
+Tomcat with all possible options (example):
 
-    tomcat::install { 'NUMBER':
-	tomcat_release => 'VERSION',		Default: 7.0.47
-	java_home => 'PATHTOJDK',		Default: /usr/lib/jvm/j2sdk1.6-oracle
-	tomcat_user= 'TOMCATUSER',		Default: tomcat
-	tomcat_locales => 'LOCALES',		Default: de_DE@euro
-    }
+class { tomcats::multiple::tomcat01:
+      class_tomcat_release => '7.0.52',
+      class_java_home => '/usr/lib/jvm/j2sdk1.6-oracle',
+      class_download_tomcat_from => 'http://archive.apache.org',
+      class_download_wrapper_from => 'http://wrapper.tanukisoftware.com/download',
+      class_tomcat_user => 'tomcat',
+      class_tomcat_locales => 'de_DE@euro',
+}
 
+These default value are set in params.pp and you can override! ;-)
+
+I have included 2 tomcat instances (tomcats::multiple::tomcat01 and tomcats::multiple::tomcat02). You can easily add more pp-files into multiple directory (copy tomcat01) and modify the first 2 lines.
+
+SUPPORTS
+--------
+Tested on:
+- Debian
+- Ubuntu
 
 TODO
 ----
 
- * ldap::server::master and ldap::server::slave do not copy
-   the schemas specified by *index_inc*. It just adds an include to slapd
- * Need support for extending ACLs
+ * hiera support
+ * exception, if a package download fails or package is corrupt
+ * tomcat-wrapper.sh not from template
 
 CopyLeft
 ---------
 
-Copyleft (C) 2013 Marcel Emmert <marcel.emmertgecg-leipzig.de> (a.k.a. echomike)
+Copyleft (C) 2013 Marcel Emmert <echomike@mailbox.org> (a.k.a. echomike)
 
