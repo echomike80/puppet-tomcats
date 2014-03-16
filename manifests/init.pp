@@ -1,7 +1,6 @@
 class tomcats {
 
-#	include tomcats::params
-
+  # system user for tomcat service
 	user { 'tomcat':
 		ensure => present,
 #		comment => 'ECG Tomcat Funktionsnutzer',
@@ -13,14 +12,12 @@ class tomcats {
 #		password => '$6$WTIzKbqC$dvQe9Bh.IxG0vVo/ILeMvHIuLg4eKd3FyhKHRxOCxuGGsr8WY.GkFh/oEdngC3HmN26.H7o334f/XLja6Hrf0.',
 	}
 
-	group { 'users':
-		ensure => present,
-	}
-
+  # tomcat installation directory
 	file { '/srv/tomcat':
 		ensure => directory,
 	}
 
+  # local directory for tomcat and wrapper archive downloads 
 	file { '/usr/src':
 		ensure => directory,
 	}
