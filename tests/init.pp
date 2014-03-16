@@ -1,1 +1,1 @@
-include tomcats
+class { tomcats::multiple::tomcat01: }
