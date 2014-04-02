@@ -11,31 +11,31 @@ define tomcats::install (
   $tomcat_locales,
 ) {
 
-	################################################
-	#                                              #
-	#   Definition of variables for installation   #
-	#                                              #
-	################################################
+  ################################################
+  #                                              #
+  #   Definition of variables for installation   #
+  #                                              #
+  ################################################
 
-	# Extract major version from tomcat_release
-	$majorversion = regsubst($tomcat_release,'^(\d+)\.(\d+)\.(\d+)$','\1')
-	
-	case $majorversion {
+  # Extract major version from tomcat_release
+  $majorversion = regsubst($tomcat_release,'^(\d+)\.(\d+)\.(\d+)$','\1')
+
+  case $majorversion {
     5: { $lib_path = "common/lib" }
     default: { $lib_path = "lib"}
   }
 
-	# Extract minor version from tomcat_release
-	$minorversion = regsubst($tomcat_release,'^(\d+)\.(\d+)\.(\d+)$','\2')
+  # Extract minor version from tomcat_release
+  $minorversion = regsubst($tomcat_release,'^(\d+)\.(\d+)\.(\d+)$','\2')
 
-	# Define package version
-	$pkg_tomcat = "apache-tomcat-${majorversion}.${minorversion}"
+  # Define package version
+  $pkg_tomcat = "apache-tomcat-${majorversion}.${minorversion}"
 
-	# Define tomcat installation directory
-	$inst_dir = "/srv/tomcat/tomcat${tomcat_number}"
+  # Define tomcat installation directory
+  $inst_dir = "/srv/tomcat/tomcat${tomcat_number}"
 
-	# Define Download-URL
-	$download_url = "${download_tomcat_from}/dist/tomcat/tomcat-${majorversion}/v${tomcat_release}/bin/apache-tomcat-${tomcat_release}.tar.gz"
+  # Define Download-URL
+  $download_url = "${download_tomcat_from}/dist/tomcat/tomcat-${majorversion}/v${tomcat_release}/bin/apache-tomcat-${tomcat_release}.tar.gz"
 
   # Define tomcat ports
   case $tomcat_number {
@@ -92,23 +92,23 @@ define tomcats::install (
        }
         }
 
-	# Define wrapper installation package for OS and arch and define Download-URL
-	# i.e.: http://wrapper.tanukisoftware.com/download/3.5.21/wrapper-linux-x86-32-3.5.21.tar.gz
-	
-	case $operatingsystem {
-		Debian, Linux: {
-			case $architecture {
-				i386: {
-					$pkg_wrapper = "wrapper-linux-x86-32-${wrapper_release}"
-					$download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-32-${wrapper_release}.tar.gz"
-				}
-				amd64: {
-					$pkg_wrapper = "wrapper-linux-x86-64-${wrapper_release}"
-					$download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-64-${wrapper_release}.tar.gz"
-				}
-			}
-		}
-	}
+  # Define wrapper installation package for OS and arch and define Download-URL
+  # i.e.: http://wrapper.tanukisoftware.com/download/3.5.21/wrapper-linux-x86-32-3.5.21.tar.gz
+
+  case $operatingsystem {
+    Debian, Linux: {
+      case $architecture {
+        i386: {
+          $pkg_wrapper = "wrapper-linux-x86-32-${wrapper_release}"
+          $download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-32-${wrapper_release}.tar.gz"
+        }
+        amd64: {
+          $pkg_wrapper = "wrapper-linux-x86-64-${wrapper_release}"
+          $download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-64-${wrapper_release}.tar.gz"
+        }
+      }
+    }
+  }
 
 
   ###############################
@@ -244,16 +244,19 @@ Shutdown-Port: ${shutdown_port}",
   file { "${inst_dir}/${pkg_tomcat}/conf/wrapper.conf":
     content => template('tomcats/wrapper.conf.erb'),
     owner => $tomcat_user,
-    group => 'users',
-    require => Exec [ "extract_wrapper_${inst_dir}" ],
-  }
-  file { "${inst_dir}/${pkg_tomcat}/conf/wrapper-custom.conf":
-    content => template('tomcats/wrapper-custom.conf.erb'),
     replace => false,
-    owner => $tomcat_user,
     group => 'users',
     require => Exec [ "extract_wrapper_${inst_dir}" ],
   }
+
+#  # wrapper-custom.conf is disabled, because wrapper.conf won't be replaced by puppet
+#  file { "${inst_dir}/${pkg_tomcat}/conf/wrapper-custom.conf":
+#    content => template('tomcats/wrapper-custom.conf.erb'),
+#    replace => false,
+#    owner => $tomcat_user,
+#    group => 'users',
+#    require => Exec [ "extract_wrapper_${inst_dir}" ],
+#  }
 
   # Overwrite default tomcat startup and shutdown script with custom scripts
   
