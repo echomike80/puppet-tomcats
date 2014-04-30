@@ -17,11 +17,22 @@ class tomcats {
 		ensure => directory,
 	}
 
-  # local directory for tomcat and wrapper archive downloads 
-	file { '/usr/src':
+  # tomcat package directory
+	file { '/srv/tomcat/source':
 		ensure => directory,
+		owner => tomcat,
+		require => File [ '/srv/tomcat' ],
 	}
 
+  # readme file in package directoy
+	file { '/srv/tomcat/source/_important.txt':
+		ensure => present,
+		content => "# Directory managed by puppet
+Do not delete anything here! Thx.",
+		owner => tomcat,
+		require => File [ '/srv/tomcat/source' ],
+		
+	}
 }
 
 

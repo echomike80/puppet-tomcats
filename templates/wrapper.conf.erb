@@ -45,8 +45,9 @@ wrapper.java.classpath.4=../bin/tomcat-juli.jar
 
 # Java Library Path (location of Wrapper.DLL or libwrapper.so)
 wrapper.java.library.path.1=../<%= @lib_path %>
-wrapper.java.library.path.2=/usr/lib
-wrapper.java.library.path.3=%ORACLE_HOME%/lib
+wrapper.java.library.path.2=../<%= @lib_path %>/ext
+wrapper.java.library.path.3=/usr/lib
+wrapper.java.library.path.4=%ORACLE_HOME%/lib
 
 # Java Bits.  On applicable platforms, tells the JVM to run in 32 or 64-bit mode.
 wrapper.java.additional.auto_bits=TRUE
