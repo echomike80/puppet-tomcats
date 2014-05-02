@@ -1,40 +1,38 @@
+#encoding=UTF-8
+
 # File managed by puppet
 
 #*************************************************************************************#
 #                                                                                     #
 # Diese Datei darf niemals bearbeitet werden, da sie durch Puppet generiert wird!!!   #
-# Solltest du Änderungen machen wollen, dann bitte in der wrapper-custom.conf.        #
+# Solltest du Aenderungen machen wollen, dann bitte in der wrapper-custom.conf.       #
 #                                                                                     #
 #*************************************************************************************#
 
 
 # Environment
-set.LC_ALL=<%= @tomcat_locales %>
-set.LANG=<%= @tomcat_locales %>
-set.LANGUAGE=<%= @tomcat_locales %>
 set.JAVA_HOME=<%= @java_home %>
 
 
 # Java Application
 wrapper.java.command=%JAVA_HOME%/bin/java
 
-# Tell the Wrapper to log the full generated Java command line.
-#wrapper.java.command.loglevel=INFO
 
 # Java Additional Parameters
 wrapper.java.additional.1=-Djava.endorsed.dirs=../common/endorsed
 wrapper.java.additional.2=-Dcatalina.base=..
 wrapper.java.additional.3=-Dcatalina.home=..
 wrapper.java.additional.4=-Djava.io.tmpdir=../temp
-wrapper.java.additional.5=-XX:MaxPermSize=128m
-wrapper.java.additional.6=-Decg.logdir=<%= @inst_dir %>/<%= @pkg_tomcat %>/logs/
-wrapper.java.additional.7=-server
+wrapper.java.additional.5=-XX:MaxPermSize=256m
+wrapper.java.additional.6=-server
+
 
 # Java Main class.  This class must implement the WrapperListener interface
 #  or guarantee that the WrapperManager class is initialized.  Helper
 #  classes are provided to do this for you.  See the Integration section
 #  of the documentation for details.
 wrapper.java.mainclass=org.tanukisoftware.wrapper.WrapperStartStopApp
+
 
 # Java Classpath (include wrapper.jar)  Add class path elements as
 #  needed starting from 1
@@ -43,20 +41,22 @@ wrapper.java.classpath.2=%JAVA_HOME%/lib/tools.jar
 wrapper.java.classpath.3=../bin/bootstrap.jar
 wrapper.java.classpath.4=../bin/tomcat-juli.jar
 
+
 # Java Library Path (location of Wrapper.DLL or libwrapper.so)
 wrapper.java.library.path.1=../<%= @lib_path %>
 wrapper.java.library.path.2=../<%= @lib_path %>/ext
 wrapper.java.library.path.3=/usr/lib
-wrapper.java.library.path.4=%ORACLE_HOME%/lib
+
 
 # Java Bits.  On applicable platforms, tells the JVM to run in 32 or 64-bit mode.
 wrapper.java.additional.auto_bits=TRUE
 
+
 # Initial Java Heap Size (in MB)
 wrapper.java.initmemory=256
-
 # Maximum Java Heap Size (in MB)
 wrapper.java.maxmemory=1024
+
 
 # Application parameters.  Add parameters as needed starting from 1
 wrapper.app.parameter.1=org.apache.catalina.startup.Bootstrap
@@ -66,6 +66,7 @@ wrapper.app.parameter.4=org.apache.catalina.startup.Bootstrap
 wrapper.app.parameter.5=true
 wrapper.app.parameter.6=1
 wrapper.app.parameter.7=stop
+
 
 #********************************************************************
 # Wrapper Logging Properties

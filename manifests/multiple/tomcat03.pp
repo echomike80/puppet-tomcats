@@ -1,5 +1,5 @@
-class tomcats::multiple::tomcat01 (
-  $tomcat_number = 01,
+class tomcats::multiple::tomcat03 (
+  $tomcat_number = 03,
   $tomcat_release = undef,
   $java_home = undef,
   $download_tomcat_from = undef,

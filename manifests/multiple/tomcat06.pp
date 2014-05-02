@@ -4,7 +4,6 @@ class tomcats::multiple::tomcat06 (
   $java_home = undef,
   $download_tomcat_from = undef,
   $download_wrapper_from = undef,
-  $tomcat_locales = undef,
 ) {
 
   # load tomcat default stuff like system user, group, etc
@@ -17,45 +16,38 @@ class tomcats::multiple::tomcat06 (
   if $tomcat_release == undef {
         $temp_tomcat_release = $tomcats::params::default_tomcat_release
       }
-  else { 
+  else {
         $temp_tomcat_release = $tomcat_release
       }
   if $java_home == undef {
         $temp_java_home = $tomcats::params::default_java_home
       }
-  else { 
+  else {
         $temp_java_home = $java_home
       }
   if $download_tomcat_from == undef {
         $temp_download_tomcat_from = $tomcats::params::default_download_tomcat_from
       }
-  else { 
+  else {
         $temp_download_tomcat_from = $download_tomcat_from
       }
   if $download_wrapper_from == undef {
         $temp_download_wrapper_from = $tomcats::params::default_download_wrapper_from
       }
-  else { 
+  else {
         $temp_download_wrapper_from = $download_wrapper_from
-      }
-  if $tomcat_locales == undef {
-        $temp_tomcat_locales = $tomcats::params::default_tomcat_locales
-      }
-  else { 
-        $temp_tomcat_locales = $tomcat_locales
       }
 
   $temp_tomcat_number = $tomcat_number
   $temp_wrapper_release = $tomcats::params::default_wrapper_release
 
   # load resource type install with all parameters
-  tomcats::install2 { "$temp_tomcat_number": 
+  tomcats::install { "$temp_tomcat_number": 
     tomcat_number => $temp_tomcat_number,
     tomcat_release => $temp_tomcat_release,
     wrapper_release => $temp_wrapper_release,
     java_home => $temp_java_home,
     download_tomcat_from => $temp_download_tomcat_from,
     download_wrapper_from => $temp_download_wrapper_from,
-    tomcat_locales => $temp_tomcat_locales,
   }
 }
