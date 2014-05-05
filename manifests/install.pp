@@ -93,21 +93,17 @@ define tomcats::install (
        }
         }
 
-  # Define wrapper installation package for OS and arch and define Download-URL
+  # Define wrapper installation package for architecture and define Download-URL
   # i.e.: http://wrapper.tanukisoftware.com/download/3.5.21/wrapper-linux-x86-32-3.5.21.tar.gz
 
-  case $operatingsystem {
-    Debian, Linux: {
-      case $architecture {
-        i386: {
-          $pkg_wrapper = "wrapper-linux-x86-32-${wrapper_release}"
-          $download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-32-${wrapper_release}.tar.gz"
-        }
-        amd64: {
-          $pkg_wrapper = "wrapper-linux-x86-64-${wrapper_release}"
-          $download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-64-${wrapper_release}.tar.gz"
-        }
-      }
+  case $architecture {
+    i386: {
+      $pkg_wrapper = "wrapper-linux-x86-32-${wrapper_release}"
+      $download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-32-${wrapper_release}.tar.gz"
+    }
+    amd64: {
+      $pkg_wrapper = "wrapper-linux-x86-64-${wrapper_release}"
+      $download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-64-${wrapper_release}.tar.gz"
     }
   }
 
