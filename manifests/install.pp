@@ -158,7 +158,7 @@ define tomcats::install (
   exec { "clean_tomcat_${tomcat_number}":
     path => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     cwd => "${src_dir}",
-    command => "rm -rf apache-tomcat-${tomcat_release}/conf/context.xml apache-tomcat-${tomcat_release}/conf/server.xml apache-tomcat-${tomcat_release}/conf/tomcat-users.xml apache-tomcat-${tomcat_release}/conf/web.xml apache-tomcat-${tomcat_release}/webapps/ROOT apache-tomcat-${tomcat_release}/webapps/docs apache-tomcat-${tomcat_release}/webapps/examples apache-tomcat-${tomcat_release}/webapps/balancer apache-tomcat-${tomcat_release}/webapps/jsp-examples apache-tomcat-${tomcat_release}/webapps/servlets-examples apache-tomcat-${tomcat_release}/webapps/tomcat-docs apache-tomcat-${tomcat_release}/webapps/webdav",
+    command => "rm -rf apache-tomcat-${tomcat_release}/conf/catalina.properties apache-tomcat-${tomcat_release}/conf/context.xml apache-tomcat-${tomcat_release}/conf/server.xml apache-tomcat-${tomcat_release}/conf/tomcat-users.xml apache-tomcat-${tomcat_release}/conf/web.xml apache-tomcat-${tomcat_release}/webapps/ROOT apache-tomcat-${tomcat_release}/webapps/docs apache-tomcat-${tomcat_release}/webapps/examples apache-tomcat-${tomcat_release}/webapps/balancer apache-tomcat-${tomcat_release}/webapps/jsp-examples apache-tomcat-${tomcat_release}/webapps/servlets-examples apache-tomcat-${tomcat_release}/webapps/tomcat-docs apache-tomcat-${tomcat_release}/webapps/webdav",
     onlyif => "test -f ${src_dir}/apache-tomcat-${tomcat_release}/conf/context.xml",
     require => Exec [ "extract_tomcat_${tomcat_number}" ],
   }
@@ -171,8 +171,16 @@ define tomcats::install (
     require => Exec [ "clean_tomcat_${tomcat_number}" ],
   }
 
+  file { "${inst_dir}/${pkg_tomcat}/conf/catalina.properties":
+    content => template("tomcats/catalina.properties${majorversion}.erb"),
+    replace => false,
+    owner => tomcat,
+    require => Exec ["copy_tomcat_${inst_dir}"],
+  }
+
   file { "${inst_dir}/${pkg_tomcat}/conf/tomcat-users.xml":
     content => template("tomcats/tomcat-users.xml.erb"),
+    replace => false,
     owner => tomcat,
     require => Exec ["copy_tomcat_${inst_dir}"],
   }
