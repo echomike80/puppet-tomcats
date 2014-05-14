@@ -3,7 +3,7 @@ class tomcats {
   # system user for tomcat service
 	user { 'tomcat':
 		ensure => present,
-		comment => 'ECG Tomcat Funktionsnutzer',
+		comment => 'system user for tomcat',
 		home => '/home/tomcat',
 		managehome => true,
 		uid => '3002',
