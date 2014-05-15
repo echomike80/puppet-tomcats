@@ -12,10 +12,14 @@
 # set.JAVA_HOME=<%= @java_home %>
 
 
-## Hier de_DE@euro Locales aktivierbar, falls noetig
-# set.LC_ALL=de_DE@euro
-# set.LANG=de_DE@euro
-# set.LANGUAGE=de_DE@euro
+##*************************************************************************************##
+
+
+# Java Library Path fuer Oracle
+wrapper.java.library.path.4=%ORACLE_HOME%/lib
+
+
+##*************************************************************************************##
 
 
 ## Zusaetzliche Java Parameter
@@ -32,8 +36,21 @@ wrapper.java.additional.18=-Duser.timezone=Europe/Berlin
 wrapper.java.additional.19=-Djava.awt.headless=true
 
 
-# Java Library Path für Oracle
-wrapper.java.library.path.4=%ORACLE_HOME%/lib
+##*************************************************************************************##
+
+
+## Liferay Parameter bei Bedarf einschalten ##
+#
+# wrapper.java.additional.30=-Dfile.encoding=UTF8
+# wrapper.java.additional.31=-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false
+# wrapper.java.additional.32=-Duser.timezone=GMT
+
+
+## BI Portal Parameter bei Bedarf einschalten
+# wrapper.java.additional.30=-Dfile.encoding=ISO-8859-15
+
+
+##*************************************************************************************##
 
 
 ## Hier kann die Java MaxPermSize Konfiguration ueberschrieben werden
