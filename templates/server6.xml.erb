@@ -120,7 +120,8 @@
            that are performed against this UserDatabase are immediately
            available for use by the Realm.  -->
       <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
-             resourceName="UserDatabase"/>
+             resourceName="UserDatabase"
+             digest="sha-256" />
 
       <!-- Define the default virtual host
            Note: XML Schema validation will not work with Xerces 2.2.
