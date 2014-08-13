@@ -344,6 +344,13 @@ Shutdown-Port: ${shutdown_port}",
     group => 'users',
     require => Exec [ "extract_wrapper_${tomcat_number}" ],
   }
+  file { "${inst_dir}/tomcat_home":
+    ensure => link,
+    target => "$inst_dir/$pkg_tomcat",
+    owner => tomcat,
+    group => 'users',
+    require => Exec [ "extract_wrapper_${tomcat_number}" ],
+  }
   file { "${inst_dir}/logs":
     ensure => link,
     target => "$inst_dir/$pkg_tomcat/logs",
