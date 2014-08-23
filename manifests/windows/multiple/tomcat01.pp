@@ -6,6 +6,7 @@ class tomcats::windows::multiple::tomcat01 (
   $download_wrapper_from = undef,
   $parent_inst_dir = undef,
   $path_to_7zip = undef,
+  $autostart = undef,
 ) {
 
   # load tomcat default configuration parameters, which are used when no parameters are set (undef)
@@ -53,6 +54,12 @@ class tomcats::windows::multiple::tomcat01 (
   else {
         $temp_path_to_7zip = $path_to_7zip
       }
+  if $autostart == undef {
+        $temp_autostart = $tomcats::windows::params::autostart
+      }
+  else {
+        $temp_autostart = $autostart
+      }
 
   $temp_tomcat_number = $tomcat_number
   # fixed values in tomcats::windows:params
@@ -68,5 +75,6 @@ class tomcats::windows::multiple::tomcat01 (
     download_tomcat_from => $temp_download_tomcat_from,
     download_wrapper_from => $temp_download_wrapper_from,
     path_to_7zip => $temp_path_to_7zip,
+    autostart => $temp_autostart,
   }
 }
