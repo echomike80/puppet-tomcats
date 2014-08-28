@@ -1,1 +1,1 @@
-class { tomcats::multiple::tomcat01: }
+class { tomcats::instance: }

@@ -1,7 +1,7 @@
 {
   "name": "echomike80-tomcats",
-  "version": "1.0.0",
-  "summary": "",
+  "version": "1.1.0",
+  "summary": "Puppet module to manage several Apache Tomcat instances on one node",
   "author": "Marcel Emmert",
   "description": "",
   "dependencies": [],
@@ -9,5 +9,5 @@
   "checksums": {},
   "source": "",
   "project_page": "https://github.com/echomike80/puppet-tomcats",
-  "license": ""
+  "license": "Apache 2.0"
 }

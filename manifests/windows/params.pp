@@ -7,7 +7,6 @@ class tomcats::windows::params {
   $default_download_wrapper_from = "\\\\puppet\\softwaredistribtion"
   $default_parent_inst_dir = "C:\\Program Files"
   $path_to_7zip = "C:\\Program Files\\7-Zip"
-  $autostart = true
 
   # fixed value you can only here in this params-file
   $default_wrapper_release = "3.5.21"

@@ -9,7 +9,6 @@ define tomcats::windows::install (
   $download_tomcat_from,
   $download_wrapper_from,
   $path_to_7zip,
-  $autostart,
 ) {
 
   ################################################
