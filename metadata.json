@@ -4,7 +4,7 @@
   "author": "Marcel Emmert",
   "summary": "Deploy multiple tomcat instances.",
   "license": "Apache 2.0",
-  "source": "",
+  "source": "https://github.com/echomike80/puppet-tomcats",
   "project_page": "https://github.com/echomike80/puppet-tomcats",
   "issues_url": "https://github.com/echomike80/puppet-tomcats/issues",
   "dependencies": [
