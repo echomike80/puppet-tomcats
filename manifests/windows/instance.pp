@@ -18,6 +18,7 @@ class tomcats::windows::instance (
       download_tomcat_from => "\\\\puppet\\softwaredistribution",
       download_wrapper_from => "\\\\puppet\\softwaredistribution",
       path_to_7zip => "C:\\Program Files\\7-Zip",
+      autostart => true,
   },
 ) {
 

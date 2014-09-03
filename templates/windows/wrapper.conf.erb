@@ -43,9 +43,9 @@ wrapper.java.classpath.4=../bin/tomcat-juli.jar
 
 
 # Java Library Path (location of Wrapper.DLL or libwrapper.so)
-wrapper.java.library.path.1=../<%= @lib_path %>
-wrapper.java.library.path.2=../<%= @lib_path %>/ext
-wrapper.java.library.path.3=../bin
+wrapper.java.library.path.1=..\<%= @lib_path %>
+wrapper.java.library.path.2=..\<%= @lib_path %>\ext
+wrapper.java.library.path.3=..\bin
 
 
 # Java Bits.  On applicable platforms, tells the JVM to run in 32 or 64-bit mode.
@@ -72,7 +72,7 @@ wrapper.app.parameter.7=stop
 wrapper.ntservice.name=Tomcat<%= @tomcat_number %>
 wrapper.ntservice.displayname=Apache Tomcat <%= @tomcat_release %> (Tomcat <%= @tomcat_number %>)
 wrapper.ntservice.description=Application Server Tomcat <%= @tomcat_number %>
-wrapper.ntservice.starttype=AUTO_START
+<% if @autostart == true %>wrapper.ntservice.starttype=AUTO_START<% end %>
 # wrapper.ntservice.console=true
 # wrapper.ntservice.interactive=true
 

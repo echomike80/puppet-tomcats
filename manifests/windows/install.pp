@@ -9,6 +9,7 @@ define tomcats::windows::install (
   $download_tomcat_from,
   $download_wrapper_from,
   $path_to_7zip,
+  $autostart,
 ) {
 
   ################################################
@@ -171,6 +172,20 @@ define tomcats::windows::install (
     require => Exec [ "clean_tomcat_source_webapps_${tomcat_number}" ],
   }
 
+  # copy tomcat5.exe and tcnative-1.dll into bin dir, if tomcat5 and x64 architecture
+  if ($majorversion == '5') and ($::architecture == 'x64') { 
+    exec { "copy_tcnative_${inst_dir}":
+      command => "cmd.exe /c copy ${parent_inst_dir}\\Sources\\apache-tomcat-${tomcat_release}\\bin\\x64\\tcnative-1.dll ${inst_dir}\\${pkg_tomcat}\\bin\\",
+      refreshonly => true,
+      subscribe => Exec [ "xcopy_tomcat_${inst_dir}" ],
+    }
+    exec { "copy_tomcat5exe_${inst_dir}":
+      command => "cmd.exe /c copy ${parent_inst_dir}\\Sources\\apache-tomcat-${tomcat_release}\\bin\\x64\\tomcat5.exe ${inst_dir}\\${pkg_tomcat}\\bin\\",
+      refreshonly => true,
+      subscribe => Exec [ "xcopy_tomcat_${inst_dir}" ],
+    }
+  }
+
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\tomcat-users.xml":
     content => template("tomcats/windows/tomcat-users.xml.erb"),
     require => Exec ["xcopy_tomcat_${inst_dir}"],
@@ -193,16 +208,6 @@ define tomcats::windows::install (
     replace => false,
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
-
-#  # To-Do: Puppet run has to know ENVvar $ORACLE_HOME
-#  # To-Do: Wenn sich der Oracle Client ändert wird die neue Lib nicht mehr kopiert
-#  # Umgebungsvariablen unter Linux müssen geschützt werden mit "\"
-#  exec { "${inst_dir}\\${pkg_tomcat}\\${lib_path}\\ojdbc6.jar":
-#    path => "C:\\Windows\\system32",
-#    command => "cmd.exe /c copy %ORACLE_HOME%\\jdbc\\lib\\ojdbc6.jar ${inst_dir}\\${pkg_tomcat}\\${lib_path}\\ojdbc6.jar",
-#    creates => "${inst_dir}\\${pkg_tomcat}\\${lib_path}\\ojdbc6.jar",
-#    require => Exec [ "xcopy_tomcat_${inst_dir}" ],
-#  }
 
   file { "${inst_dir}\\ports.txt":
     ensure => present,
