@@ -1,6 +1,6 @@
 {
   "name": "echomike-tomcats",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "Marcel Emmert",
   "summary": "Deploy multiple tomcat instances.",
   "license": "Apache 2.0",
