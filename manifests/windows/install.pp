@@ -188,34 +188,40 @@ define tomcats::windows::install (
 
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\tomcat-users.xml":
     content => template("tomcats/windows/tomcat-users.xml.erb"),
+    replace => false,
+    source_permissions => ignore,
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\context.xml":
     content => template("tomcats/windows/context${majorversion}.xml.erb"),
     replace => false,
+    source_permissions => ignore,
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\server.xml":
     content => template("tomcats/windows/server${majorversion}.xml.erb"),
     replace => false,
+    source_permissions => ignore,
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\web.xml":
     content => template("tomcats/windows/web${majorversion}.xml.erb"),
     replace => false,
+    source_permissions => ignore,
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}\\ports.txt":
     ensure => present,
-    content => "# File managed by puppet
-
-HTTP-Port: ${http_port}
-AJP-Port: ${ajp_port}
-Shutdown-Port: ${shutdown_port}",
+    content => "# File managed by puppet \r\n
+\r\n
+HTTP-Port: ${http_port} \r\n
+AJP-Port: ${ajp_port} \r\n
+Shutdown-Port: ${shutdown_port} \r\n",
+    source_permissions => ignore,
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
@@ -275,11 +281,13 @@ Shutdown-Port: ${shutdown_port}",
   # deploy wrapper configuration (after copy wrapper files into tomcat installation directory)
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\wrapper.conf":
     content => template('tomcats/windows/wrapper.conf.erb'),
+    source_permissions => ignore,
     require => Exec [ "${inst_dir}\\${pkg_tomcat}\\${lib_path}\\wrapper.jar" ],
   }
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\wrapper-custom.conf":
     content => template('tomcats/windows/wrapper-custom.conf.erb'),
     replace => false,
+    source_permissions => ignore,
     require => Exec [ "${inst_dir}\\${pkg_tomcat}\\${lib_path}\\wrapper.jar" ],
   }
 
@@ -294,6 +302,7 @@ Shutdown-Port: ${shutdown_port}",
     ensure => present,
     content => "# File managed by puppet
 Wrapper registered as Windows service \"Tomcat${tomcat_number}\"",
+    source_permissions => ignore,
     require => Exec [ "service_wrapper_${inst_dir}" ],
   }
 
