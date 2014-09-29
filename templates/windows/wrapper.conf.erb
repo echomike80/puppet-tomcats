@@ -70,8 +70,8 @@ wrapper.app.parameter.7=stop
 
 # win service
 wrapper.ntservice.name=Tomcat<%= @tomcat_number %>
-wrapper.ntservice.displayname=Apache Tomcat <%= @tomcat_release %> (Tomcat <%= @tomcat_number %>)
-wrapper.ntservice.description=Application Server Tomcat <%= @tomcat_number %>
+wrapper.ntservice.displayname=<% if @hostname =~ /^PC-ECG-/ %>ECG <% end %>Apache Tomcat <%= @tomcat_release %> (Tomcat <%= @tomcat_number %>)
+wrapper.ntservice.description=Application Server Tomcat <%= @tomcat_number %><% if @hostname =~ /^PC-ECG-/ %>installed on your ECG PC<% end %>
 <% if @autostart == true %>wrapper.ntservice.starttype=AUTO_START<% end %>
 # wrapper.ntservice.console=true
 # wrapper.ntservice.interactive=true
