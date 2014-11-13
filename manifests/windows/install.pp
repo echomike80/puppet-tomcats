@@ -193,6 +193,13 @@ define tomcats::windows::install (
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
+  file { "${inst_dir}\\${pkg_tomcat}\\conf\\catalina.properties":
+    content => template("tomcats/windows/catalina.properties${majorversion}.erb"),
+    replace => false,
+    source_permissions => ignore,
+    require => Exec ["xcopy_tomcat_${inst_dir}"],
+  }
+
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\context.xml":
     content => template("tomcats/windows/context${majorversion}.xml.erb"),
     replace => false,
