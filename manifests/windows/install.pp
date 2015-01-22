@@ -232,6 +232,16 @@ Shutdown-Port: ${shutdown_port} \r\n",
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
+  # deploy special tomcat start.bat, that ca be modified by users
+  file { "${inst_dir}\\${pkg_tomcat}\\bin\\start.bat":
+    content => template("tomcats/windows/start.bat.erb"),
+    replace => false,
+    source_permissions => ignore,
+    require => Exec ["xcopy_tomcat_${inst_dir}"],
+  }
+
+
+
 
   ################################
   #                              #

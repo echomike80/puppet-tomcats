@@ -1,0 +1,19 @@
+REM JRebel
+set JREBEL_ARGS=-javaagent:C:\ECG\JRebel\jrebel6\jrebel.jar -Drebel.user=%USERNAME% -noverify
+
+set JAVA_HOME=C:\ECG\Java\jdk6
+REM set JAVA_HOME=C:\ECG\Java\jdk7
+REM set JAVA_HOME=C:\ECG\Java\jdk8
+
+REM ohne JRebel
+REM set JAVA_OPTS=-Xmx768M -Xms64M -XX:MaxPermSize=256M -Dcom.sun.management.jmxremote -Decg.logdir=<%= @inst_dir %>\<%= @pkg_tomcat %>\logs\ -Duser.language=de -Duser.country=de 
+
+REM mit JRebel
+set JAVA_OPTS=%JREBEL_ARGS% -Xmx768M -Xms64M -XX:MaxPermSize=256M -Dcom.sun.management.jmxremote -Decg.logdir=<%= @inst_dir %>\<%= @pkg_tomcat %>\logs\ -Duser.language=de -Duser.country=de 
+
+rem set JAVA_OPTS=-Xmx768M -Xms64M -XX:MaxPermSize=256M -Dcom.sun.management.jmxremote -Decg.logdir=<%= @inst_dir %>\<%= @pkg_tomcat %>\logs\ -Duser.language=de -Duser.country=de -Dhttp.proxyHost=141.6.33.129 -Dhttp.proxyPort=8080
+
+set JPDA_ADDRESS=8000
+set JPDA_TRANSPORT=dt_socket
+call <%= @inst_dir %>\<%= @pkg_tomcat %>\bin\catalina.bat start
+
