@@ -107,12 +107,10 @@ define tomcats::windows::install (
   #                             #
   ###############################
 
-  # tomcat[xx] installation directory
-  file { "${inst_dir}":
-    ensure  => directory,
-  }
-  file { "${inst_dir}\\${pkg_tomcat}":
-    ensure  => directory,
+  # tomcat[xx] installation directory with mkdir, because of ATLAS Deployment with deeper directory structure
+  exec { "create_directory_${tomcat_number}":
+    command => "cmd.exe /c mkdir ${inst_dir}\\${pkg_tomcat}",
+    creates => "${inst_dir}\\${pkg_tomcat}",
   }
 
   # get archive and put it in tmp dir
@@ -120,6 +118,7 @@ define tomcats::windows::install (
     command => "(new-object System.Net.WebClient).DownloadFile('${download_tomcat_from}', '${install_tempdir_windows}\\${pkg_tomcat_filename}.zip')",
     provider => powershell,
     creates => "${install_tempdir_windows}\\${pkg_tomcat_filename}.zip",
+    require => Exec [ "create_directory_${tomcat_number}" ],
   }
 
   # unzip archive into target dir and do not overwrite existing files (for example static/ content)
