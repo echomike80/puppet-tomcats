@@ -111,6 +111,9 @@ define tomcats::windows::install (
   file { "${inst_dir}":
     ensure  => directory,
   }
+  file { "${inst_dir}\\${pkg_tomcat}":
+    ensure  => directory,
+  }
 
   # get archive and put it in tmp dir
   exec { "download_tomcat_${tomcat_number}":
