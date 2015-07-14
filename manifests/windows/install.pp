@@ -110,7 +110,6 @@ define tomcats::windows::install (
   # tomcat[xx] installation directory
   file { "${inst_dir}":
     ensure  => directory,
-    require => Exec [ "source_dir_tomcats_${tomcat_number}" ],
   }
 
   # get archive and put it in tmp dir
