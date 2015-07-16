@@ -243,7 +243,7 @@ Shutdown-Port: ${shutdown_port} \r\n",
     #######################################
 
     # Define wrapper package
-    case $architecture {
+    case $::architecture {
       x86: {
         $pkg_wrapper = "wrapper-windows-x86-32-${wrapper_release}"
       }
@@ -257,6 +257,7 @@ Shutdown-Port: ${shutdown_port} \r\n",
       command => "(new-object System.Net.WebClient).DownloadFile('${download_wrapper_from}', '${install_tempdir_windows}\\${pkg_wrapper}.zip')",
       provider => powershell,
       creates => "${install_tempdir_windows}\\${pkg_wrapper}.zip",
+      require => File [ "${inst_dir}\\${pkg_tomcat}\\conf\\web.xml" ],
     }
 
     # unzip archive into target dir and do not overwrite existing files (for example static/ content)
