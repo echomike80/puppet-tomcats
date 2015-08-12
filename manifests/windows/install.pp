@@ -180,35 +180,35 @@ define tomcats::windows::install (
   }
 
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\tomcat-users.xml":
-    content => template("tomcats/windows/tomcat-users.xml.erb"),
+    content => template("tomcats/common/tomcat-users.xml.erb"),
     replace => false,
     source_permissions => ignore,
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\catalina.properties":
-    content => template("tomcats/windows/catalina.properties${majorversion}.erb"),
+    content => template("tomcats/common/catalina.properties${majorversion}.erb"),
     replace => false,
     source_permissions => ignore,
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\context.xml":
-    content => template("tomcats/windows/context${majorversion}.xml.erb"),
+    content => template("tomcats/common/context${majorversion}.xml.erb"),
     replace => false,
     source_permissions => ignore,
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\server.xml":
-    content => template("tomcats/windows/server${majorversion}.xml.erb"),
+    content => template("tomcats/common/server${majorversion}.xml.erb"),
     replace => false,
     source_permissions => ignore,
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}\\${pkg_tomcat}\\conf\\web.xml":
-    content => template("tomcats/windows/web${majorversion}.xml.erb"),
+    content => template("tomcats/common/web${majorversion}.xml.erb"),
     replace => false,
     source_permissions => ignore,
     require => Exec ["xcopy_tomcat_${inst_dir}"],
@@ -225,13 +225,13 @@ Shutdown-Port: ${shutdown_port} \r\n",
     require => Exec ["xcopy_tomcat_${inst_dir}"],
   }
 
-  # deploy special tomcat start.bat, that ca be modified by users
-  file { "${inst_dir}\\${pkg_tomcat}\\bin\\start.bat":
-    content => template("tomcats/windows/start.bat.erb"),
-    replace => false,
-    source_permissions => ignore,
-    require => Exec ["xcopy_tomcat_${inst_dir}"],
-  }
+#  # deploy special tomcat start.bat, that ca be modified by users
+#  file { "${inst_dir}\\${pkg_tomcat}\\bin\\start.bat":
+#    content => template("tomcats/windows/start.bat.erb"),
+#    replace => false,
+#    source_permissions => ignore,
+#    require => Exec ["xcopy_tomcat_${inst_dir}"],
+#  }
 
 
   if $wrapper == 'tanuki' {

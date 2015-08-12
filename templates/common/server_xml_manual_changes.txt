@@ -1,0 +1,20 @@
+Disable AccessLogValve:
+ 
+<!-- Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+      prefix="localhost_access_log." suffix=".txt"
+      pattern="%h %l %u %t &quot;%r&quot; %s %b" /-->
+
+
+Add attribut URIEncoding und IPv4 Adressen Bindung:
+ 
+<Connector address="0.0.0.0" port="8080" protocol="HTTP/1.1"
+      connectionTimeout="20000"
+      redirectPort="8443" 
+      URIEncoding="UTF-8" />
+
+
+Enable sha-256 for encryption for tomcat-users.xml:
+
+<Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+      resourceName="UserDatabase"
+      digest="sha-256" />

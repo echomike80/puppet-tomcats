@@ -172,35 +172,35 @@ define tomcats::install (
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/catalina.properties":
-    content => template("tomcats/catalina.properties${majorversion}.erb"),
+    content => template("tomcats/common/catalina.properties${majorversion}.erb"),
     replace => false,
     owner => tomcat,
     require => Exec ["copy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/tomcat-users.xml":
-    content => template("tomcats/tomcat-users.xml.erb"),
+    content => template("tomcats/common/tomcat-users.xml.erb"),
     replace => false,
     owner => tomcat,
     require => Exec ["copy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/context.xml":
-    content => template("tomcats/context${majorversion}.xml.erb"),
+    content => template("tomcats/common/context${majorversion}.xml.erb"),
     replace => false,
     owner => tomcat,
     require => Exec ["copy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/server.xml":
-    content => template("tomcats/server${majorversion}.xml.erb"),
+    content => template("tomcats/common/server${majorversion}.xml.erb"),
     replace => false,
     owner => tomcat,
     require => Exec ["copy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/web.xml":
-    content => template("tomcats/web${majorversion}.xml.erb"),
+    content => template("tomcats/common/web${majorversion}.xml.erb"),
     replace => false,
     owner => tomcat,
     require => Exec ["copy_tomcat_${inst_dir}"],
@@ -285,7 +285,7 @@ Shutdown-Port: ${shutdown_port}",
 
   file { "${inst_dir}/${pkg_tomcat}/bin/tomcat-wrapper.sh":
     # deploy own tomcat-wrapper start script
-    content => template('tomcats/tomcat-wrapper.sh.erb'),
+    content => template('tomcats/linux/tomcat-wrapper.sh.erb'),
     owner => tomcat,
     group => 'users',
     mode => 0755,
@@ -295,14 +295,14 @@ Shutdown-Port: ${shutdown_port}",
   # deploy wrapper configuration
 
   file { "${inst_dir}/${pkg_tomcat}/conf/wrapper.conf":
-    content => template('tomcats/wrapper.conf.erb'),
+    content => template('tomcats/linux/wrapper.conf.erb'),
     owner => tomcat,
     group => 'users',
     require => Exec [ "extract_wrapper_${tomcat_number}" ],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/wrapper-custom.conf":
-    content => template('tomcats/wrapper-custom.conf.erb'),
+    content => template('tomcats/linux/wrapper-custom.conf.erb'),
     replace => false,
     owner => tomcat,
     group => 'users',
@@ -312,14 +312,14 @@ Shutdown-Port: ${shutdown_port}",
   # Overwrite default tomcat startup and shutdown script with custom scripts
 
   file { "${inst_dir}/${pkg_tomcat}/bin/startup.sh":
-    content => template('tomcats/startup.sh.erb'),
+    content => template('tomcats/linux/startup.sh.erb'),
     owner => tomcat,
     group => 'users',
     mode => 0755,
     require => Exec [ "extract_wrapper_${tomcat_number}" ],
   }
   file { "${inst_dir}/${pkg_tomcat}/bin/shutdown.sh":
-    content => template('tomcats/shutdown.sh.erb'),
+    content => template('tomcats/linux/shutdown.sh.erb'),
     owner => tomcat,
     mode => 0755,
     require => Exec [ "extract_wrapper_${tomcat_number}" ],
@@ -328,7 +328,7 @@ Shutdown-Port: ${shutdown_port}",
   # deploy Linux init-Script
 
   file { "/etc/init.d/tomcat${tomcat_number}":
-    content => template('tomcats/initscript.erb'),
+    content => template('tomcats/linux/initscript.erb'),
     owner => tomcat,
     group => 'users',
     mode => 0755,

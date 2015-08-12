@@ -1,0 +1,69 @@
+##*************************************************************************************##
+##                                                                                     ##
+##  Diese Datei DARF bearbeitet werden und ueberschreibt die Standardeinstellungen in  ##
+##  der Datei wrapper.conf.                                                            ##
+##                                                                                     ##
+##*************************************************************************************##
+
+
+## Hier kann ein anderes Java gesetzt werden und die Standardeinstellung wird ueberschrieben
+# wrapper.java.command=/usr/lib/jvm/jdk-7-oracle-x64/bin/java
+# wrapper.java.classpath.2=/usr/lib/jvm/jdk-7-oracle-x64/lib/tools.jar
+
+
+##*************************************************************************************##
+
+# Oracle Umgebungsvariable
+set.ORACLE_HOME=/u01/app/oracle/product/11.2.0/client_1
+
+# Java Library Path fuer Oracle
+wrapper.java.library.path.4=%ORACLE_HOME%/lib
+
+
+##*************************************************************************************##
+
+
+## Zusaetzliche Java Parameter
+## GerisSte Active MQ Bug Birt
+wrapper.java.additional.10=-Dorg.apache.activeio.journal.active.DisableLocking=true
+wrapper.java.additional.11=-Dcom.sun.management.jmxremote
+wrapper.java.additional.12=-Dcom.sun.management.jmxremote.port=<%= @jmx_port %>
+wrapper.java.additional.13=-Dcom.sun.management.jmxremote.authenticate=false
+wrapper.java.additional.14=-Dcom.sun.management.jmxremote.ssl=false
+wrapper.java.additional.15=-Decg.logdir=<%= @inst_dir %>/<%= @pkg_tomcat %>/logs/
+wrapper.java.additional.16=-Duser.language=de
+wrapper.java.additional.17=-Duser.country=de
+wrapper.java.additional.18=-Duser.timezone=Europe/Berlin
+wrapper.java.additional.19=-Djava.awt.headless=true
+
+
+##*************************************************************************************##
+
+
+## Liferay Parameter bei Bedarf einschalten ##
+#
+# wrapper.java.additional.30=-Dfile.encoding=UTF8
+# wrapper.java.additional.31=-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false
+# wrapper.java.additional.32=-Duser.timezone=GMT
+
+
+## BI Portal Parameter bei Bedarf einschalten
+# wrapper.java.additional.30=-Dfile.encoding=ISO-8859-15
+
+
+##*************************************************************************************##
+
+
+## Hier kann die Java MaxPermSize Konfiguration ueberschrieben werden
+
+## Maximum Java PermSize (in MB)
+# wrapper.java.additional.5=-XX:MaxPermSize=256m
+
+
+## Hier kann die Java Speicherkonfiguration ueberschrieben werden (Standard: Init 256 MB, Max 1024)
+
+## Initial Java Heap Size (in MB)
+# wrapper.java.initmemory=256
+
+## Maximum Java Heap Size (in MB)
+# wrapper.java.maxmemory=1024

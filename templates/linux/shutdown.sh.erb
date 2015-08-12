@@ -1,0 +1,54 @@
+#!/bin/bash
+
+timeout=30
+command="<%= @inst_dir %>/<%= @pkg_tomcat %>/bin/tomcat-wrapper.sh stop"
+tmpfile=./_tmp_.sh
+
+showHeader() {
+ echo "Advanced wrapper control [shutdown]"
+ echo "2012 Erdgas-Consult GmbH Leipzig"
+ echo
+}
+
+createTempFile() {
+ if [ -f $1 ]
+ then
+  rm $1
+ fi
+ echo "echo $(date +%X) Waiting $timeout secs for '$command'...;sleep $timeout;kill $pid">$1
+ chmod 775 $1
+}
+
+stopTC() {
+#$command starten und in den background schicken
+ $command&
+#ProzessID des neuen Prozesses merken
+ pid=$!
+#tmp script erstellen, aufrufen und in den background schicken
+ createTempFile $tmpfile
+ $tmpfile&
+#ProzessID merken
+ pid2=$!
+#warten, bis ProzessID von $command nicht mehr existiert
+ wait $pid &>/dev/null
+ if [ $? -eq 143 ]
+ then
+  if [ "$1" != "r" ]
+  then
+   echo "$(date +%X) Timeout, retrying..."
+   stopTC r
+  else
+   rm $tmpfile
+   echo "$(date +%X) ERROR: Could not stop tomcat, giving up!"
+   exit 1
+  fi
+ else
+    disown $pid2
+    kill $pid2
+    rm $tmpfile
+    echo "$(date +%X) Shutdown done"
+ fi
+}
+
+showHeader;
+stopTC;
