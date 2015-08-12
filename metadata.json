@@ -1,11 +1,11 @@
 {
-  "name": "echomike-tomcats",
-  "version": "1.2.0",
+  "name": "echomike80-tomcats",
+  "version": "1.2.1",
   "author": "Marcel Emmert",
   "summary": "Deploy multiple tomcat instances.",
   "license": "Apache 2.0",
-  "source": "",
-  "project_page": "",
+  "source": "https://github.com/echomike80/puppet-tomcats",
+  "project_page": "https://github.com/echomike80/puppet-tomcats",
   "issues_url": "https://github.com/echomike80/puppet-tomcats/issues",
   "dependencies": [
     {
