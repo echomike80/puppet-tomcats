@@ -221,6 +221,11 @@ define tomcats::windows::install (
     require            => Exec["xcopy_tomcat_${inst_dir}"],
   }
 
+  file { "${inst_dir}\\${pkg_tomcat}\\${lib_path}\\ext":
+    ensure  => directory,
+    require => Exec["xcopy_tomcat_${inst_dir}"],
+  }
+
   file { "${inst_dir}\\ports.txt":
     ensure             => present,
     content            => "# File managed by puppet \r\n

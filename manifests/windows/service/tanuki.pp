@@ -101,6 +101,6 @@ define tomcats::windows::service::tanuki (
     content            => "# File managed by puppet
 Wrapper registered as Windows service \"Tomcat${tomcat_home}\"",
     source_permissions => ignore,
-    require            => Exec["service_wrapper_${tomcat_home}"],
+    require            => Exec["install_service_wrapper_${tomcat_home}"],
   }
 }
