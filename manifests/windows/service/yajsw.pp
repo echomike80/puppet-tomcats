@@ -52,8 +52,8 @@ YAJSW ${wrapper_release}",
     cwd         => "${tomcat_home}\\yajsw\\conf",
     command     => "cmd.exe /c if exist wrapper.conf del wrapper.conf",
     refreshonly => true,
-    subscribe   => File[ $ctl_file ],
-    before => File [ "${tomcat_home}\\yajsw\\conf\\wrapper.conf" ], 
+    subscribe   => File[$ctl_file],
+    before      => File["${tomcat_home}\\yajsw\\conf\\wrapper.conf"],
   }
   # deploy wrapper configuration (after copy wrapper files into tomcat installation directory)
   file { "${tomcat_home}\\yajsw\\conf\\wrapper.conf":
@@ -64,6 +64,7 @@ YAJSW ${wrapper_release}",
   } ->
   # register wrapper as windows service
   exec { "install_service_wrapper_${tomcat_home}":
+    path    => "${java_home}\\bin",
     command => "${tomcat_home}\\yajsw\\bat\\installService.bat",
     creates => "${tomcat_home}\\yajsw\\bat\\installService.log",
   } ->
