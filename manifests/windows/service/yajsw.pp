@@ -47,6 +47,14 @@ define tomcats::windows::service::yajsw (
 YAJSW ${wrapper_release}",
   }
 
+  # clean default wrapper.conf subscribes the ctl file
+  exec { "clean_default_wrapper_conf_${tomcat_number}":
+    cwd         => "${tomcat_home}\\yajsw\\conf",
+    command     => "cmd.exe /c if exist wrapper.conf del wrapper.conf",
+    refreshonly => true,
+    subscribe   => File[ $ctl_file ],
+    before => File [ "${tomcat_home}\\yajsw\\conf\\wrapper.conf" ], 
+  }
   # deploy wrapper configuration (after copy wrapper files into tomcat installation directory)
   file { "${tomcat_home}\\yajsw\\conf\\wrapper.conf":
     content            => template('tomcats/windows/yajsw-wrapper.conf.erb'),
