@@ -1,5 +1,5 @@
 name    'echomike80-tomcats'
-version '1.2.1'
+version '1.3.0'
 source 'https://github.com/echomike80/puppet-tomcats'
 author 'Marcel Emmert'
 license 'Apache 2.0'
