@@ -9,4 +9,5 @@ project_page 'https://github.com/echomike80/puppet-tomcats'
 
 ## Add dependencies, if any:
 # dependency 'username/name', '>= 1.2.0'
-dependency 'puppetlabs-stdlib', ''
+dependency 'puppetlabs/powershell', ''
+dependency 'puppetlabs/stdlib', ''
