@@ -1,17 +1,17 @@
 # tomcats::windows::install resource will be used by multiple/tomcatxx.pp classes
 
 define tomcats::windows::install (
-  $tomcat_number               = undef,
-  $tomcat_release              = undef,
-  $parent_inst_dir             = undef,
-  $custom_tomcat_inst_dir_name = undef,
-  $install_tempdir_windows     = 'C:\Windows\Temp',
-  $wrapper                     = 'none',
-  $wrapper_release             = undef,
-  $java_home                   = undef,
-  $download_tomcat_from        = undef,
-  $download_wrapper_from       = undef,
-  $autostart                   = undef,) {
+  $tomcat_number           = undef,
+  $tomcat_release          = undef,
+  $parent_inst_dir         = undef,
+  $tomcat_description      = undef,
+  $install_tempdir_windows = 'C:\Windows\Temp',
+  $wrapper                 = 'none',
+  $wrapper_release         = undef,
+  $java_home               = undef,
+  $download_tomcat_from    = undef,
+  $download_wrapper_from   = undef,
+  $autostart               = undef,) {
   ################################################
   #                                              #
   #   Definition of variables for installation   #
@@ -101,8 +101,8 @@ define tomcats::windows::install (
   }
 
   # Define tomcat[xx] installation directory
-  if $custom_tomcat_inst_dir_name != undef {
-    $inst_dir = "${parent_inst_dir}\\${custom_tomcat_inst_dir_name}"
+  if $tomcat_description != undef {
+    $inst_dir = "${parent_inst_dir}\\Tomcat${tomcat_number}_${tomcat_description}"
   } else {
     $inst_dir = "${parent_inst_dir}\\Tomcat${tomcat_number}"
   }

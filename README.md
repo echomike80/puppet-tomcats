@@ -18,7 +18,7 @@ You need Powershell installed on your node to download and extract the zip-archi
 
 ! IMPORTANT !
 Please make sure the value of tomcat_number is set to "01", "02", "03" and so on. This module needs this number to generate the nessecary ports for every instance and is also naming the appropriate directory like /srv/tomcat/tomcat[number] or C:\Tomcat\tomcat[number].
-You can use the optional/additional variable "custom_tomcat_inst_dir_name => 'tomcat_livesystem'" to define a user-friendly, human-readable and understandable subdiretory like /srv/tomcat/tomcat_livesystem or C:\Tomcat\tomcat_livesystem.
+You can use the optional/additional variable "tomcat_description => 'livesystem'" to define a user-friendly, human-readable and understandable subdiretory like /srv/tomcat/tomcat01_livesystem or C:\Tomcat\Tomcat01_livesystem.
 
 #### Linux
 Usage in site.pp, two Tomcat instances with possible options, e.g.
