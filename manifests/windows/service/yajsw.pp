@@ -1,6 +1,7 @@
 define tomcats::windows::service::yajsw (
   $tomcat_number           = undef,
   $tomcat_home             = undef,
+  $tomcat_description      = undef,
   $lib_path                = undef,
   $install_tempdir_windows = 'C:\Windows\Temp',
   $wrapper_release         = '11.11',

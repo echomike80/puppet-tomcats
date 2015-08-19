@@ -198,10 +198,10 @@ wrapper.console.title=Tomcat
 wrapper.ntservice.name=Tomcat<%= @tomcat_number %>
 
 # Display name of the service
-wrapper.ntservice.displayname=Apache Tomcat (<%= @tomcat_number %>)
+wrapper.ntservice.displayname=Apache Tomcat (<%= @tomcat_number %>)<% if @tomcat_description != nil %> - <%= @tomcat_description %><% end %>
 
 # Description of the service
-wrapper.ntservice.description=Application Server Tomcat <%= @tomcat_number %>
+wrapper.ntservice.description=Application Server Tomcat <%= @tomcat_number %><% if @tomcat_description != nil %> - <%= @tomcat_description %><% end %>
 
 # Service dependencies.  Add dependencies as needed starting from 1
 # wrapper.ntservice.dependency.1=
