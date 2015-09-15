@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>ecg.puppet</groupId>
+		<artifactId>puppet.module.base</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>tomcats</artifactId>
+	<version>1.3.4-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>ECG Puppet Module Tomcats</name>
+	<description>Puppet module to manage several Apache Tomcat instances on one node.</description>
+	<url>https://ecgwiki.vngag.de/x/EJLB</url>
+	<inceptionYear>2015</inceptionYear>
+
+	<scm>
+		<connection>scm:git:http://build:build@ecggitrepo.vngag.de/r/1620/puppet/tomcats.git</connection>
+		<url>http://ecggitrepo.vngag.de/summary/?r=1620/puppet/tomcats.git</url>
+	</scm>
+
+	<issueManagement>
+		<system>JIRA</system>
+		<url>https://jira.ecg-leipzig.de</url>
+	</issueManagement>
+	
+	<licenses>
+		<license>
+			<name>ECG Consumer License v1</name>
+			<url>https://ecgwiki.vngag.de</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>emmertm</id>
+			<name>Marcel Emmert</name>
+			<email>marcel.emmert@ecg-leipzig.de</email>
+			<organization>ECG Leipzig GmbH</organization>
+			<organizationUrl>http://www.ecg-leipzig.de/</organizationUrl>
+			<roles>
+				<role>Project lead</role>
+			</roles>
+			<timezone>+2</timezone>
+		</developer>
+		<developer>
+			<id>krulls</id>
+			<name>Stephan Krull</name>
+			<email>stephan.krull@ecg-leipzig.de</email>
+		</developer>
+	</developers>
+</project>

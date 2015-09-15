@@ -1,16 +1,17 @@
 {
-  "name": "echomike80-tomcats",
-  "version": "1.3.3",
-  "summary": "Puppet module to manage several Apache Tomcat instances on one node",
+  "_ecg-comment": "Alle Platzhalter werden durch Daten aus der pom.xml waehrend des Maven Prozesses ersetzt.",
+  "name": "ecg-${project.artifactId}",
+  "version": "${project.version}",
   "author": "Marcel Emmert",
-  "description": "",
+  "summary": "${project.description}",
+  "license": "TODO",
+  "source": "${project.scm.url}",
+  "project_page": "${project.url}",
+  "issues_url": "${project.issueManagement.url}",
   "dependencies": [
-    {"version_requirement":">=3.0.0 <5.0.0","name":"puppetlabs/stdlib"},
-    {"version_requirement":">= 1.0.1","name":"puppetlabs/powershell"}
-  ],
-  "types": [],
-  "checksums": {},
-  "source": "https://github.com/echomike80/puppet-tomcats",
-  "project_page": "https://github.com/echomike80/puppet-tomcats",
-  "license": "Apache 2.0"
+    {
+      "name": "puppetlabs/powershell",
+      "version_requirement": ">= 1.0.5 < 1.1.0"
+    }
+  ]
 }
