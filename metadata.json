@@ -13,5 +13,22 @@
       "name": "puppetlabs/powershell",
       "version_requirement": ">= 1.0.5 < 1.1.0"
     }
+  ],
+  "_ecg-buildserver-data": [
+    {
+      "jobname": "${env.JOB_NAME}",
+      "buildserver_url": "${env.JENKINS_URL}",
+      "buildnumber": "${env.BUILD_NUMBER}",
+      "buildtime": "${custom.build.timestamp}",
+      "buildactivator": "${env.BUILD_USER_ID}",
+      "buildhost": "${env.NODE_NAME}"
+    }
+  ],
+  "_ecg-scm-data": [
+    {
+      "scmurl": "${env.GIT_URL}",
+      "scmbranch": "${env.GIT_BRANCH}",
+      "scmcommit": "${env.GIT_COMMIT}"
+    }
   ]
 }
