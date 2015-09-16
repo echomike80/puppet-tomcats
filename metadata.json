@@ -17,8 +17,8 @@
   "_ecg-buildserver-data": [
     {
       "jobname": "${env.JOB_NAME}",
-      "buildserver_url": "${env.JENKINS_URL}",
       "buildnumber": "${env.BUILD_NUMBER}",
+      "buildurl": "${env.BUILD_URL}",
       "buildtime": "${custom.build.timestamp}",
       "buildactivator": "${env.BUILD_USER_ID}",
       "buildhost": "${env.NODE_NAME}"
