@@ -89,7 +89,7 @@ wrapper.java.library.path.2=..<%= @lib_path_with_slashes %>/ext
 ##################################
 
 # wrapper.java.library.path.3=Path/to/OracleClient/product/11.2.0/client_x64/bin
-
+# wrapper.java.additional.20 = -Doracle.net.tns_admin=Path/to/OracleClient/product/11.2.0/client_x64/network/ADMIN
 
 ###########
 #   ECG   #
@@ -111,7 +111,6 @@ wrapper.java.additional.12 = -Dcom.sun.management.jmxremote.ssl=false
 wrapper.java.additional.17 = -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
 wrapper.java.additional.18 = -Djava.util.logging.config.file=<%= @tomcat_home_with_slashes %>/conf/logging.properties
 wrapper.java.additional.19 = -Djava.io.tmpdir=<%= @tomcat_home_with_slashes %>/temp
-
 
 ###########
 #   ECG   #

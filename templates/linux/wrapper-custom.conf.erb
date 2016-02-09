@@ -22,7 +22,6 @@ wrapper.java.library.path.4=%ORACLE_HOME%/lib
 
 ##*************************************************************************************##
 
-
 ## Zusaetzliche Java Parameter
 ## GerisSte Active MQ Bug Birt
 wrapper.java.additional.10=-Dorg.apache.activeio.journal.active.DisableLocking=true
@@ -36,6 +35,11 @@ wrapper.java.additional.17=-Duser.country=de
 wrapper.java.additional.18=-Duser.timezone=Europe/Berlin
 wrapper.java.additional.19=-Djava.awt.headless=true
 
+# Ticket#201602012015752 - Random-Number-Generator
+wrapper.java.additional.20=-Djava.security.egd=file:/dev/urandom
+
+# Ticket#201601272015675 - Oracle TNS
+wrapper.java.additional.21=-Doracle.net.tns_admin=%ORACLE_HOME%/network/ADMIN
 
 ##*************************************************************************************##
 
