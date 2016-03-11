@@ -112,7 +112,7 @@ define tomcats::install (
       $pkg_wrapper = "wrapper-linux-x86-64-${wrapper_release}"
     }
   }
- 
+
   ###############################
   #                             #
   #     Installation Tomcat     #
