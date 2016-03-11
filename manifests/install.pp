@@ -1,14 +1,14 @@
 # tomcats::install resource will be used by multile/tomcatxx.pp classes
 
 define tomcats::install (
-  $tomcat_number         = undef,
-  $tomcat_release        = undef,
-  $tomcat_description     = undef,
-  $wrapper_release       = undef,
-  $java_home             = undef,
-  $download_tomcat_from  = undef,
-  $download_wrapper_from = undef,) {
-  
+  $tomcat_number        = undef,
+  $tomcat_release       = undef,
+  $tomcat_description   = undef,
+  $tomcat_user          = 'tomcat',
+  $wrapper_release      = undef,
+  $java_home            = undef,
+  $download_url_tomcat  = undef,
+  $download_url_wrapper = undef,) {
   ################################################
   #                                              #
   #   Definition of variables for installation   #
@@ -38,9 +38,6 @@ define tomcats::install (
 
   # Define tomcat source directory
   $src_dir = "/srv/tomcat/src"
-
-  # Define Download-URL
-  $download_url = "${download_tomcat_from}/dist/tomcat/tomcat-${majorversion}/v${tomcat_release}/bin/apache-tomcat-${tomcat_release}.tar.gz"
 
   # Define tomcat ports
   case $tomcat_number {
@@ -107,20 +104,15 @@ define tomcats::install (
     }
   }
 
-  # Define wrapper installation package for architecture and define Download-URL
-  # i.e.: http://wrapper.tanukisoftware.com/download/3.5.21/wrapper-linux-x86-32-3.5.21.tar.gz
-
   case $architecture {
     i386  : {
       $pkg_wrapper = "wrapper-linux-x86-32-${wrapper_release}"
-      $download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-32-${wrapper_release}.tar.gz"
     }
     amd64 : {
       $pkg_wrapper = "wrapper-linux-x86-64-${wrapper_release}"
-      $download_url_wrapper = "${download_wrapper_from}/${wrapper_release}/wrapper-linux-x86-64-${wrapper_release}.tar.gz"
     }
   }
-
+ 
   ###############################
   #                             #
   #     Installation Tomcat     #
@@ -130,13 +122,13 @@ define tomcats::install (
   # create /srv/tomcat/tomcat01, e.g.
   file { $inst_dir:
     ensure => directory,
-    owner  => tomcat,
+    owner  => $tomcat_user,
   }
 
   # create /srv/tomcat/tomcat01, e.g.
   file { "${inst_dir}/${pkg_tomcat}":
     ensure  => directory,
-    owner   => tomcat,
+    owner   => $tomcat_user,
     require => File["$inst_dir"],
   }
 
@@ -144,8 +136,8 @@ define tomcats::install (
   exec { "download_tomcat_${tomcat_number}":
     path    => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     cwd     => $src_dir,
-    user    => tomcat,
-    command => "wget -O apache-tomcat-${tomcat_release}.tar.gz ${download_url}",
+    user    => $tomcat_user,
+    command => "wget -O apache-tomcat-${tomcat_release}.tar.gz ${download_url_tomcat}",
     creates => "${src_dir}/apache-tomcat-${tomcat_release}.tar.gz",
     require => File["${inst_dir}/${pkg_tomcat}"],
   }
@@ -153,7 +145,7 @@ define tomcats::install (
   exec { "mkdir_src_dir_${tomcat_number}":
     path    => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     cwd     => $src_dir,
-    user    => tomcat,
+    user    => $tomcat_user,
     command => "mkdir -p ${src_dir}/apache-tomcat-${tomcat_release}",
     creates => "${src_dir}/apache-tomcat-${tomcat_release}",
     require => Exec["download_tomcat_${tomcat_number}"],
@@ -162,7 +154,7 @@ define tomcats::install (
   exec { "extract_tomcat_${tomcat_number}":
     path    => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     cwd     => $src_dir,
-    user    => tomcat,
+    user    => $tomcat_user,
     command => "tar --directory ${src_dir}/apache-tomcat-${tomcat_release} --strip-components=1 -xzf ${src_dir}/apache-tomcat-${tomcat_release}.tar.gz",
     creates => "${src_dir}/apache-tomcat-${tomcat_release}/RELEASE-NOTES",
     require => Exec["mkdir_src_dir_${tomcat_number}"],
@@ -178,7 +170,7 @@ define tomcats::install (
 
   exec { "copy_tomcat_${inst_dir}":
     path    => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
-    user    => tomcat,
+    user    => $tomcat_user,
     command => "cp -rf ${src_dir}/apache-tomcat-${tomcat_release}/* ${inst_dir}/${pkg_tomcat}",
     unless  => "grep ${tomcat_release} ${inst_dir}/${pkg_tomcat}/RELEASE-NOTES",
     require => Exec["clean_tomcat_${tomcat_number}"],
@@ -187,41 +179,41 @@ define tomcats::install (
   file { "${inst_dir}/${pkg_tomcat}/conf/catalina.properties":
     content => template("tomcats/common/catalina.properties${majorversion}.erb"),
     replace => false,
-    owner   => tomcat,
+    owner   => $tomcat_user,
     require => Exec["copy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/tomcat-users.xml":
     content => template("tomcats/common/tomcat-users.xml.erb"),
     replace => false,
-    owner   => tomcat,
+    owner   => $tomcat_user,
     require => Exec["copy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/context.xml":
     content => template("tomcats/common/context${majorversion}.xml.erb"),
     replace => false,
-    owner   => tomcat,
+    owner   => $tomcat_user,
     require => Exec["copy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/server.xml":
     content => template("tomcats/common/server${majorversion}.xml.erb"),
     replace => false,
-    owner   => tomcat,
+    owner   => $tomcat_user,
     require => Exec["copy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/conf/web.xml":
     content => template("tomcats/common/web${majorversion}.xml.erb"),
     replace => false,
-    owner   => tomcat,
+    owner   => $tomcat_user,
     require => Exec["copy_tomcat_${inst_dir}"],
   }
 
   file { "${inst_dir}/${pkg_tomcat}/${lib_path}/ext":
     ensure  => directory,
-    owner   => tomcat,
+    owner   => $tomcat_user,
     require => Exec["copy_tomcat_${inst_dir}"],
   }
 
@@ -232,7 +224,7 @@ define tomcats::install (
 HTTP-Port: ${http_port}
 AJP-Port: ${ajp_port}
 Shutdown-Port: ${shutdown_port}",
-    owner   => tomcat,
+    owner   => $tomcat_user,
     require => Exec["copy_tomcat_${inst_dir}"],
   }
 
@@ -246,7 +238,7 @@ Shutdown-Port: ${shutdown_port}",
   exec { "download_wrapper_${inst_dir}":
     path    => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     cwd     => $src_dir,
-    user    => tomcat,
+    user    => $tomcat_user,
     command => "wget -O ${pkg_wrapper}.tar.gz ${download_url_wrapper}",
     creates => "${src_dir}/${pkg_wrapper}.tar.gz",
     require => Exec["copy_tomcat_${inst_dir}"],
@@ -255,7 +247,7 @@ Shutdown-Port: ${shutdown_port}",
   exec { "extract_wrapper_${tomcat_number}":
     path    => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     cwd     => $src_dir,
-    user    => tomcat,
+    user    => $tomcat_user,
     command => "tar  --directory ${src_dir} -xzf ${src_dir}/${pkg_wrapper}.tar.gz",
     creates => "${src_dir}/${pkg_wrapper}/bin",
     require => Exec["download_wrapper_${inst_dir}"],
@@ -264,7 +256,7 @@ Shutdown-Port: ${shutdown_port}",
   # copy wrapper files into tomcat installation directory
   exec { "${inst_dir}/${pkg_tomcat}/bin/wrapper":
     path    => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
-    user    => tomcat,
+    user    => $tomcat_user,
     command => "cp ${src_dir}/${pkg_wrapper}/bin/wrapper ${inst_dir}/${pkg_tomcat}/bin/wrapper",
     creates => "${inst_dir}/${pkg_tomcat}/bin/wrapper",
     require => Exec["extract_wrapper_${tomcat_number}"],
@@ -273,7 +265,7 @@ Shutdown-Port: ${shutdown_port}",
   exec { "${inst_dir}/${pkg_tomcat}/${lib_path}/libwrapper.so":
     path    => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     command => "cp ${src_dir}/${pkg_wrapper}/lib/libwrapper.so ${inst_dir}/${pkg_tomcat}/${lib_path}/libwrapper.so",
-    user    => tomcat,
+    user    => $tomcat_user,
     creates => "${inst_dir}/${pkg_tomcat}/${lib_path}/libwrapper.so",
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -281,7 +273,7 @@ Shutdown-Port: ${shutdown_port}",
   exec { "${inst_dir}/${pkg_tomcat}/${lib_path}/wrapper.jar":
     path    => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     command => "cp ${src_dir}/${pkg_wrapper}/lib/wrapper.jar ${inst_dir}/${pkg_tomcat}/${lib_path}/wrapper.jar",
-    user    => tomcat,
+    user    => $tomcat_user,
     creates => "${inst_dir}/${pkg_tomcat}/${lib_path}/wrapper.jar",
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -289,7 +281,7 @@ Shutdown-Port: ${shutdown_port}",
   file { "${inst_dir}/${pkg_tomcat}/bin/tomcat-wrapper.sh":
     # deploy own tomcat-wrapper start script
     content => template('tomcats/linux/tomcat-wrapper.sh.erb'),
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     mode    => 0755,
     require => Exec["extract_wrapper_${tomcat_number}"],
@@ -299,7 +291,7 @@ Shutdown-Port: ${shutdown_port}",
 
   file { "${inst_dir}/${pkg_tomcat}/conf/wrapper.conf":
     content => template('tomcats/linux/wrapper.conf.erb'),
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -307,7 +299,7 @@ Shutdown-Port: ${shutdown_port}",
   file { "${inst_dir}/${pkg_tomcat}/conf/wrapper-custom.conf":
     content => template('tomcats/linux/wrapper-custom.conf.erb'),
     replace => false,
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -316,7 +308,7 @@ Shutdown-Port: ${shutdown_port}",
 
   file { "${inst_dir}/${pkg_tomcat}/bin/startup.sh":
     content => template('tomcats/linux/startup.sh.erb'),
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     mode    => 0755,
     require => Exec["extract_wrapper_${tomcat_number}"],
@@ -324,7 +316,7 @@ Shutdown-Port: ${shutdown_port}",
 
   file { "${inst_dir}/${pkg_tomcat}/bin/shutdown.sh":
     content => template('tomcats/linux/shutdown.sh.erb'),
-    owner   => tomcat,
+    owner   => $tomcat_user,
     mode    => 0755,
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -332,7 +324,7 @@ Shutdown-Port: ${shutdown_port}",
   # deploy Linux init-Script
   file { "/etc/init.d/tomcat${tomcat_number}":
     content => template('tomcats/linux/initscript.erb'),
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     mode    => 0755,
     require => File["${inst_dir}/${pkg_tomcat}/bin/startup.sh"],
@@ -343,7 +335,7 @@ Shutdown-Port: ${shutdown_port}",
   file { "/home/tomcat/tomcat${tomcat_number}":
     ensure  => link,
     target  => $inst_dir,
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -351,7 +343,7 @@ Shutdown-Port: ${shutdown_port}",
   file { "${inst_dir}/tomcat_home":
     ensure  => link,
     target  => "${inst_dir}/${pkg_tomcat}",
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -359,7 +351,7 @@ Shutdown-Port: ${shutdown_port}",
   file { "${inst_dir}/logs":
     ensure  => link,
     target  => "${inst_dir}/${pkg_tomcat}/logs",
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -367,7 +359,7 @@ Shutdown-Port: ${shutdown_port}",
   file { "${inst_dir}/webapps":
     ensure  => link,
     target  => "${inst_dir}/${pkg_tomcat}/webapps",
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -375,7 +367,7 @@ Shutdown-Port: ${shutdown_port}",
   file { "${inst_dir}/startup.sh":
     ensure  => link,
     target  => "${inst_dir}/${pkg_tomcat}/bin/startup.sh",
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -383,7 +375,7 @@ Shutdown-Port: ${shutdown_port}",
   file { "${inst_dir}/shutdown.sh":
     ensure  => link,
     target  => "${inst_dir}/${pkg_tomcat}/bin/shutdown.sh",
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -391,7 +383,7 @@ Shutdown-Port: ${shutdown_port}",
   file { "${inst_dir}/wrapper.log":
     ensure  => link,
     target  => "${inst_dir}/${pkg_tomcat}/logs/wrapper.log",
-    owner   => tomcat,
+    owner   => $tomcat_user,
     group   => 'users',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
@@ -408,7 +400,7 @@ Shutdown-Port: ${shutdown_port}",
     path        => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     cwd         => "${inst_dir}/${pkg_tomcat}/bin",
     command     => "${inst_dir}/${pkg_tomcat}/bin/shutdown.sh && ${inst_dir}/${pkg_tomcat}/bin/startup.sh",
-    user        => tomcat,
+    user        => $tomcat_user,
     onlyif      => "test -f ${inst_dir}/${pkg_tomcat}/bin/tomcat${majorversion}.pid",
     subscribe   => [
       Exec["extract_tomcat_${tomcat_number}"],

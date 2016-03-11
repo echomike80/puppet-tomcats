@@ -23,9 +23,6 @@ class tomcats::windows::instance (
     autostart             => true,
   }
   ,) {
-  # load tomcat default configuration parameters, which are used when no parameters are set (undef)
-  require tomcats::windows::params
-
   # call tomcats::windows::install define to configure each tomcat instance
   create_resources(tomcats::windows::install, $tomcat_instances, $tomcat_instances_defaults)
 
