@@ -172,7 +172,7 @@ define tomcats::install (
     path    => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
     user    => $tomcat_user,
 #    command => "cp -rf ${src_dir}/apache-tomcat-${tomcat_release}/* ${inst_dir}/${pkg_tomcat}",
-    command => "[ -d ${inst_dir}/${pkg_tomcat}/lib ] && rm -f ${inst_dir}/${pkg_tomcat}/lib/ecj*.jar; cp -rf ${src_dir}/apache-tomcat-${tomcat_release}/* ${inst_dir}/${pkg_tomcat}",    
+    command => "[ -f ${inst_dir}/${pkg_tomcat}/lib/ecj*.jar ] && rm -f ${inst_dir}/${pkg_tomcat}/lib/ecj*.jar; cp -rf ${src_dir}/apache-tomcat-${tomcat_release}/* ${inst_dir}/${pkg_tomcat}",    
     unless  => "grep ${tomcat_release} ${inst_dir}/${pkg_tomcat}/RELEASE-NOTES",
     require => Exec["clean_tomcat_${tomcat_number}"],
   }
