@@ -172,7 +172,7 @@ define tomcats::windows::install (
   # xcopy doc - http://www.microsoft.com/resources/documentation/windows/xp/all/proddocs/en-us/xcopy.mspx?mfr=true
   exec { "xcopy_tomcat_${inst_dir}":
 #    command => "cmd.exe /c xcopy ${install_tempdir_windows}\\apache-tomcat-${tomcat_release}\\*.* ${inst_dir}\\${pkg_tomcat}\\ /e /s /h",
-    command => "cmd.exe /c if exist ${inst_dir}\\${pkg_tomcat}\\lib del ${inst_dir}\\${pkg_tomcat}\\lib\\ecj*.jar & xcopy ${install_tempdir_windows}\\apache-tomcat-${tomcat_release}\\*.* ${inst_dir}\\${pkg_tomcat}\\ /e /s /h /Y",
+    command => "cmd.exe /c (if exist ${inst_dir}\\${pkg_tomcat}\\lib del ${inst_dir}\\${pkg_tomcat}\\lib\\ecj*.jar) & xcopy ${install_tempdir_windows}\\apache-tomcat-${tomcat_release}\\*.* ${inst_dir}\\${pkg_tomcat}\\ /e /s /h /Y",
 #    creates => "${inst_dir}\\${pkg_tomcat}\\bin",
     unless => "findstr ${tomcat_release} ${inst_dir}\\${pkg_tomcat}\\RELEASE-NOTES",
     require => Exec["clean_tomcat_source_webapps_${tomcat_number}"],
