@@ -3,7 +3,7 @@
 timeout=30
 
 # Perform Threaddump and delete old Dumps
-<%= @inst_dir %>/<%= @pkg_tomcat %>/bin/threaddump.sh <%= @tomcat_number %> <%= @inst_dir %>/<%= @pkg_tomcat %>/logs
+<%= @inst_dir %>/<%= @pkg_tomcat %>/bin/threaddump.sh tomcat<%= @tomcat_number %> <%= @inst_dir %>/<%= @pkg_tomcat %>/logs
 echo "Deleting threaddumps older then 7 days"
 find <%= @inst_dir %>/<%= @pkg_tomcat %>/bin/threaddump_* -type f -mtime +7 -delete &>/dev/null
 
