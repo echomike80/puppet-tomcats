@@ -1,0 +1,32 @@
+#!/bin/bash
+ 
+# Check if mandatory first parameter is defined
+if [ -z $1 ]
+  then
+    echo "No parameter was passed to script (like tomcat01 or process id). Please do so!"
+    exit 1
+fi
+ 
+# Check if voluntary second parameter (path) is defined
+if [ -z $2 ]
+  then
+    PATH_THREADDUMP="."
+  else
+    PATH_THREADDUMP="$2"
+fi
+ 
+# define vars
+DATE=$(date '+%Y%m%d_%H%M')
+JAVA_PID=$(ps x | grep $1 | grep catalina | awk '{print $1}')
+JAVA_BINARY=$(ps x | grep $1 | grep catalina | awk '{print $5}')
+# Quelle (cut string on last delimiter): http://unix.stackexchange.com/questions/217628/cut-string-on-last-delimiter
+PATH_JAVA_BIN=$(ps x | grep $1 | grep catalina | awk '{print $5}' | rev | cut -d'/' -f2- | rev)
+ 
+if [ -z $JAVA_PID ]
+  then
+    echo "No appropriate Java process found"
+    exit 1
+fi
+# perform threaddump
+echo "Performing Threaddump"
+$PATH_JAVA_BIN/jstack -l $JAVA_PID > $PATH_THREADDUMP/threaddump_$DATE.out

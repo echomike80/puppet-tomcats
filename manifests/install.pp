@@ -318,11 +318,23 @@ Shutdown-Port: ${shutdown_port}",
   file { "${inst_dir}/${pkg_tomcat}/bin/shutdown.sh":
     content => template('tomcats/linux/shutdown.sh.erb'),
     owner   => $tomcat_user,
+    group   => 'users',
+    mode    => 0755,
+    require => Exec["extract_wrapper_${tomcat_number}"],
+  }
+
+  # deploy Linux threaddump-Script
+
+  file { "${inst_dir}/${pkg_tomcat}/bin/threaddump.sh":
+    content => template('tomcats/linux/threaddump.sh.erb'),
+    owner   => $tomcat_user,
+    group   => 'users',
     mode    => 0755,
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
 
   # deploy Linux init-Script
+
   file { "/etc/init.d/tomcat${tomcat_number}":
     content => template('tomcats/linux/initscript.erb'),
     owner   => $tomcat_user,
