@@ -2,10 +2,11 @@
 
 timeout=30
 
-# Perform Threaddump and delete old Dumps
-<%= @inst_dir %>/<%= @pkg_tomcat %>/bin/threaddump.sh tomcat<%= @tomcat_number %> <%= @inst_dir %>/<%= @pkg_tomcat %>/logs
-echo "Deleting threaddumps older then 7 days"
-find <%= @inst_dir %>/<%= @pkg_tomcat %>/bin/threaddump_* -type f -mtime +7 -delete &>/dev/null
+## Perform Threaddump and delete old Dumps
+## uncomment the following 3 lines to enable this feature
+#<%= @inst_dir %>/<%= @pkg_tomcat %>/bin/threaddump.sh tomcat<%= @tomcat_number %> <%= @inst_dir %>/<%= @pkg_tomcat %>/logs
+#echo "Deleting threaddumps older then 7 days"
+#find <%= @inst_dir %>/<%= @pkg_tomcat %>/bin/threaddump_* -type f -mtime +7 -delete &>/dev/null
 
 # Stop Tomcat
 command="<%= @inst_dir %>/<%= @pkg_tomcat %>/bin/tomcat-wrapper.sh stop"
@@ -13,7 +14,7 @@ tmpfile=./_tmp_.sh
 
 showHeader() {
  echo "Advanced wrapper control [shutdown]"
- echo "2016 EXXETA AG"
+ echo "2017 EXXETA AG"
  echo
 }
 
