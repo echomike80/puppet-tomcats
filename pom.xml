@@ -18,7 +18,7 @@
 	<inceptionYear>2015</inceptionYear>
 
 	<scm>
-		<connection>scm:git:http://build:build@ecggitrepo.vngag.de/r/1620/puppet/tomcats.git</connection>
+		<connection>scm:git:http://build:build@git.lej.eis.network/r/1620/puppet/tomcats.git</connection>
 		<url>http://ecggitrepo.vngag.de/summary/?r=1620/puppet/tomcats.git</url>
 	</scm>
 
