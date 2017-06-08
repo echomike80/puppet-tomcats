@@ -7,6 +7,7 @@ define tomcats::install (
   $tomcat_user          = 'tomcat',
   $wrapper_release      = undef,
   $java_home            = undef,
+  $restart_after_update = 'false',
   $download_url_tomcat  = undef,
   $download_url_wrapper = undef,) {
   ################################################
@@ -407,18 +408,19 @@ Shutdown-Port: ${shutdown_port}",
   #                              #
   ################################
 
-
-  # Restart service after tomcat update or wrapper update or configuration update, but only if tomcat[x].pid exists in bin directory
-  exec { "restart_${inst_dir}":
-    path        => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
-    cwd         => "${inst_dir}/${pkg_tomcat}/bin",
-    command     => "${inst_dir}/${pkg_tomcat}/bin/shutdown.sh && ${inst_dir}/${pkg_tomcat}/bin/startup.sh",
-    user        => $tomcat_user,
-    onlyif      => "test -f ${inst_dir}/${pkg_tomcat}/bin/tomcat${majorversion}.pid",
-    subscribe   => [
-      Exec["extract_tomcat_${tomcat_number}"],
-      Exec["extract_wrapper_${tomcat_number}"],
-      File["${inst_dir}/${pkg_tomcat}/conf/wrapper.conf"]],
-    refreshonly => true,
+  if $restart_after_update == 'true' {
+    # Restart service after tomcat update or wrapper update or configuration update, but only if tomcat[x].pid exists in bin directory
+    exec { "restart_${inst_dir}":
+      path        => ["/usr/bin", "/usr/sbin", "/bin", "/sbin"],
+      cwd         => "${inst_dir}/${pkg_tomcat}/bin",
+      command     => "${inst_dir}/${pkg_tomcat}/bin/shutdown.sh && ${inst_dir}/${pkg_tomcat}/bin/startup.sh",
+      user        => $tomcat_user,
+      onlyif      => "test -f ${inst_dir}/${pkg_tomcat}/bin/tomcat${majorversion}.pid",
+      subscribe   => [
+        Exec["extract_tomcat_${tomcat_number}"],
+        Exec["extract_wrapper_${tomcat_number}"],
+        File["${inst_dir}/${pkg_tomcat}/conf/wrapper.conf"]],
+      refreshonly => true,
+    }
   }
 }
