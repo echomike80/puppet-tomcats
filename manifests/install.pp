@@ -42,55 +42,55 @@ define tomcats::install (
 
   # Define tomcat ports
   case $tomcat_number {
-    01, 1   : {
+    '01', 1   : {
       $http_port = '8080'
       $shutdown_port = '8005'
       $ajp_port = '8009'
       $jmx_port = '9017'
     }
-    02, 2   : {
+    '02', 2   : {
       $http_port = '8090'
       $shutdown_port = '8006'
       $ajp_port = '8010'
       $jmx_port = '9018'
     }
-    03, 3   : {
+    '03', 3   : {
       $http_port = '8091'
       $shutdown_port = '8007'
       $ajp_port = '8011'
       $jmx_port = '9019'
     }
-    04, 4   : {
+    '04', 4   : {
       $http_port = '8092'
       $shutdown_port = '8008'
       $ajp_port = '8012'
       $jmx_port = '9020'
     }
-    05, 5   : {
+    '05', 5   : {
       $http_port = '8093'
       $shutdown_port = '8013'
       $ajp_port = '8014'
       $jmx_port = '9021'
     }
-    06, 6   : {
+    '06', 6   : {
       $http_port = '8094'
       $shutdown_port = '8015'
       $ajp_port = '8016'
       $jmx_port = '9022'
     }
-    07, 7   : {
+    '07', 7   : {
       $http_port = '8095'
       $shutdown_port = '8017'
       $ajp_port = '8018'
       $jmx_port = '9023'
     }
-    08, 8   : {
+    '08', 8   : {
       $http_port = '8096'
       $shutdown_port = '8019'
       $ajp_port = '8020'
       $jmx_port = '9024'
     }
-    09, 9   : {
+    '09', 9   : {
       $http_port = '8097'
       $shutdown_port = '8021'
       $ajp_port = '8022'
@@ -285,7 +285,7 @@ Shutdown-Port: ${shutdown_port}",
     content => template('tomcats/linux/tomcat-wrapper.sh.erb'),
     owner   => $tomcat_user,
     group   => 'users',
-    mode    => 0755,
+    mode    => '0755',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
 
@@ -312,7 +312,7 @@ Shutdown-Port: ${shutdown_port}",
     content => template('tomcats/linux/startup.sh.erb'),
     owner   => $tomcat_user,
     group   => 'users',
-    mode    => 0755,
+    mode    => '0755',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
 
@@ -320,7 +320,7 @@ Shutdown-Port: ${shutdown_port}",
     content => template('tomcats/linux/shutdown.sh.erb'),
     owner   => $tomcat_user,
     group   => 'users',
-    mode    => 0755,
+    mode    => '0755',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
 
@@ -330,7 +330,7 @@ Shutdown-Port: ${shutdown_port}",
     content => template('tomcats/linux/threaddump.sh.erb'),
     owner   => $tomcat_user,
     group   => 'users',
-    mode    => 0755,
+    mode    => '0755',
     require => Exec["extract_wrapper_${tomcat_number}"],
   }
 
@@ -340,7 +340,7 @@ Shutdown-Port: ${shutdown_port}",
     content => template('tomcats/linux/initscript.erb'),
     owner   => $tomcat_user,
     group   => 'users',
-    mode    => 0755,
+    mode    => '0755',
     require => File["${inst_dir}/${pkg_tomcat}/bin/startup.sh"],
   }
 
